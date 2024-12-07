@@ -149,10 +149,12 @@ function App() {
   };
 
   return (
-    <div className="myapp">
-      <h1>Face Detection</h1>
-      <div className="appvide" style={{ position: 'relative' }}>
-        <video ref={videoRef} autoPlay muted width={videoWidth} height={videoHeight}></video>
+    <div className="myapp flex items-center justify-center flex-col w-[100vw] h-[100vh] gap-10 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300">
+      <div className='w-full bg-white m-0 p-0 absolute top-0'>
+        <h1 className='text-5xl italic font-serif font-bold bg-blue-900 w-full text-center'>Face Detection</h1>
+      </div>
+      <div className="appvide relative rounded-2xl overflow-hidden bg-white border-8 ">
+        <video ref={videoRef} autoPlay muted width={videoWidth} height={videoHeight} ></video>
         <canvas
           ref={canvasRef}
           width={videoWidth}
@@ -160,17 +162,17 @@ function App() {
           style={{
             position: 'absolute',
             top: 0,
-            left: 0,
+            left:0,
             pointerEvents: 'none',
             zIndex: 1,
           }}
         />
       </div>
-      <div className="buttons">
-        <button onClick={startFaceDetection} disabled={isDetectionActiveRef.current}>
+      <div className="buttons flex flex-row gap-10">
+        <button onClick={startFaceDetection} disabled={isDetectionActiveRef.current} className={`bg-[#1a1a1a] text-white hover:bg-white hover:text-black hover:scale-125 transition-all duration-300 ${startDetectionButton==='Start Detection'?' inline-block':' hidden'}`}>
           {startDetectionButton}
         </button>
-        <button onClick={stopFaceDetection} disabled={!isDetectionActiveRef.current}>
+        <button onClick={stopFaceDetection} disabled={!isDetectionActiveRef.current} className={`bg-[#1a1a1a] text-white hover:bg-white hover:text-black hover:scale-125 transition-all duration-300 ${startDetectionButton==='Start Detection'? ' hidden':' inline-block'}`}>
           Stop Detection
         </button>
       </div>
