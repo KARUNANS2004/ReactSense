@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
+import axios from 'axios';
 
 function App() {
   const videoRef = useRef();
@@ -9,6 +10,20 @@ function App() {
   const [videoWidth, setVideoWidth] = useState(0);
   const [videoHeight, setVideoHeight] = useState(0);
   const [startDetectionButton, setStartDetectionButton] = useState('Start Detection');
+  const [image,setImage]=useState("")
+
+  function convertToBase64(e){
+    console.log(e)
+    var reader=new FileReader();
+    reader.readAsDataURL(e.target.files[0])
+    reader.onload=()=>{
+      console.log(reader.result)
+      setImage(reader.result)
+    }
+    reader.onerror=error=>{
+      console.log("Error:",error)
+    }
+  }
 
   // Load models when the component mounts
   useEffect(() => {
@@ -148,6 +163,11 @@ function App() {
     context.clearRect(0, 0, videoWidth, videoHeight);
   };
 
+  function handleRefresh(){
+    window.location.reload
+    console.log(window.location.reload())
+  };
+
   return (
     <div className="myapp flex items-center justify-center flex-col w-[100vw] h-[100vh] gap-10 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300">
       <div className='w-full bg-white m-0 p-0 absolute top-0'>
@@ -172,9 +192,19 @@ function App() {
         <button onClick={startFaceDetection} disabled={isDetectionActiveRef.current} className={`bg-[#1a1a1a] text-white hover:bg-white hover:text-black hover:scale-125 transition-all duration-300 ${startDetectionButton==='Start Detection'?' inline-block':' hidden'}`}>
           {startDetectionButton}
         </button>
+
         <button onClick={stopFaceDetection} disabled={!isDetectionActiveRef.current} className={`bg-[#1a1a1a] text-white hover:bg-white hover:text-black hover:scale-125 transition-all duration-300 ${startDetectionButton==='Start Detection'? ' hidden':' inline-block'}`}>
           Stop Detection
         </button>
+
+        <button className='refresh-button bg-[#1a1a1a] text-white hover:bg-white hover:text-black hover:scale-125 transition-all duration-300 z-50' onClick={handleRefresh} >
+          Refresh Page
+        </button>
+
+        <div className='bg-[#1a1a1a] text-white hover:bg-white hover:text-black hover:scale-125 transition-all duration-300 z-50 flex'>
+          <input  type="file" name="add-image-button" id="add-image-button" accept='image/*' onChange={convertToBase64} />
+          {image==="" || image===null?"":<img src={image} alt="uploaded-image" width={50} height={50} />}
+        </div>
       </div>
     </div>
   );
